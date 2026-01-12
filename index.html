@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elixir Bunga Telang, Lemon & Sereh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #fdfaf1; /* Background krem lembut */
+            --header-bg: #4a148c;  /* Ungu gelap untuk header */
+            --telang-color: #673ab7; /* Ungu Telang */
+            --lemon-color: #ffc107;  /* Kuning Lemon */
+            --sereh-color: #4caf50;  /* Hijau Sereh */
+            --text-dark: #333;
+            --text-light: #fefefe;
+            --card-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            --modal-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--header-bg), #7b1fa2);
+            color: var(--text-light);
+            padding: 30px 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            padding: 30px 0;
+        }
+
+        .drink-display {
+            margin-bottom: 40px;
+            position: relative;
+            background-color: #fff;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .drink-display img {
+            max-width: 350px; /* Ukuran gambar minuman */
+            height: auto;
+            border-radius: 15px;
+        }
+
+        .ingredients-title {
+            font-size: 1.8em;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .ingredients-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--telang-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .ingredient-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            width: 220px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card.telang:hover { border-color: var(--telang-color); }
+        .card.lemon:hover { border-color: var(--lemon-color); }
+        .card.sereh:hover { border-color: var(--sereh-color); }
+
+        .card .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            line-height: 1; /* Agar ikon tidak terlalu tinggi */
+        }
+
+        .card h3 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .card p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Modal untuk Khasiat */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--primary-bg);
+            margin: auto;
+            padding: 40px;
+            border-radius: 25px;
+            position: relative;
+            max-width: 600px;
+            width: 90%;
+            text-align: left;
+            box-shadow: var(--modal-shadow);
+            animation: fadeInScale 0.3s ease-out forwards;
+        }
+        
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .close-button {
+            color: #aaa;
+            font-size: 35px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--telang-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .modal-header .icon {
+            font-size: 50px;
+            margin-bottom: 0;
+        }
+
+        .modal-header h2 {
+            font-size: 2.2em;
+            color: var(--telang-color);
+            margin: 0;
+        }
+
+        .modal-body ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modal-body ul li {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .modal-body ul li::before {
+            content: '🌿'; /* Bullet point ikon daun */
+            position: absolute;
+            left: 0;
+            color: var(--sereh-color);
+            font-size: 1.2em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .header p {
+                font-size: 0.9em;
+            }
+            .drink-display img {
+                max-width: 250px;
+            }
+            .card {
+                width: 180px;
+                padding: 20px;
+            }
+            .card .icon {
+                font-size: 50px;
+            }
+            .modal-content {
+                padding: 30px;
+            }
+            .modal-header
